@@ -1,0 +1,21 @@
+buildscript {
+    ext.android_sdk_version = 24
+    ext.android_support_version = '24.0.2'
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.2'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
