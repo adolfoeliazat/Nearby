@@ -1,46 +1,46 @@
 package xyz.marcb.nearby;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-
+import android.support.v4.app.FragmentActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import java.util.List;
+import rx.functions.Action1;
+import xyz.marcb.nearby.stubs.StubPlaces;
+import xyz.marcb.places.Location;
+import xyz.marcb.places.Place;
+import xyz.marcb.places.Places;
 
 public class NearbyActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    private GoogleMap map;
+    private Places places;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        places = new StubPlaces();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
+    @Override public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(50.719252, -1.842904)));
+        map.moveCamera(CameraUpdateFactory.zoomTo(15));
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        places.near(new Location(50.719252, -1.842904)).subscribe(new Action1<List<Place>>() {
+            @Override public void call(List<Place> places) {
+                map.clear();
+                for (Place place: places) {
+                    final LatLng location = new LatLng(place.location.latitude, place.location.longitude);
+                    map.addMarker(new MarkerOptions().position(location).title(place.name));
+                }
+            }
+        });
     }
 }
