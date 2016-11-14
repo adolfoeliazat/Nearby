@@ -1,1 +1,1 @@
-include ':app', ':places'
+include ':app', ':places', ':foursquare'
