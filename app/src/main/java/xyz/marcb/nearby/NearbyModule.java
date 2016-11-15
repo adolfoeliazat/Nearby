@@ -4,8 +4,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import xyz.marcb.nearby.stubs.StubPlaces;
-import xyz.marcb.nearby.viewmodel.DefaultPlacesViewModel;
-import xyz.marcb.nearby.viewmodel.PlacesViewModel;
+import xyz.marcb.nearby.viewmodels.DefaultPlacesViewModel;
+import xyz.marcb.nearby.viewmodels.PlacesViewModel;
 import xyz.marcb.places.Places;
 
 @Module abstract class NearbyModule {

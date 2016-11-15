@@ -11,7 +11,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 import javax.inject.Inject;
 import rx.functions.Action1;
-import xyz.marcb.nearby.viewmodel.PlacesViewModel;
+import xyz.marcb.nearby.viewmodels.PlacesViewModel;
 import xyz.marcb.places.Place;
 
 public class NearbyActivity extends FragmentActivity implements OnMapReadyCallback {

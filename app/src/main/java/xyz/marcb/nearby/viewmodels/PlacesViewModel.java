@@ -1,4 +1,4 @@
-package xyz.marcb.nearby.viewmodel;
+package xyz.marcb.nearby.viewmodels;
 
 import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
