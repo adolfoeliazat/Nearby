@@ -11,36 +11,40 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 import rx.functions.Action1;
 import xyz.marcb.nearby.stubs.StubPlaces;
-import xyz.marcb.places.Location;
+import xyz.marcb.nearby.viewmodel.DefaultPlacesViewModel;
+import xyz.marcb.nearby.viewmodel.PlacesViewModel;
 import xyz.marcb.places.Place;
-import xyz.marcb.places.Places;
 
 public class NearbyActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
-    private Places places;
+    private PlacesViewModel viewModel;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby);
-        places = new StubPlaces();
+        viewModel = new DefaultPlacesViewModel(new StubPlaces());
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     @Override public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(50.719252, -1.842904)));
+        map.moveCamera(CameraUpdateFactory.newLatLng(viewModel.initialLocation()));
         map.moveCamera(CameraUpdateFactory.zoomTo(15));
 
-        places.near(new Location(50.719252, -1.842904)).subscribe(new Action1<List<Place>>() {
+        viewModel.places().subscribe(new Action1<List<Place>>() {
             @Override public void call(List<Place> places) {
-                map.clear();
-                for (Place place: places) {
-                    final LatLng location = new LatLng(place.location.latitude, place.location.longitude);
-                    map.addMarker(new MarkerOptions().position(location).title(place.name));
-                }
+                setPlaces(places);
             }
         });
+    }
+
+    private void setPlaces(List<Place> places) {
+        map.clear();
+        for (Place place: places) {
+            final LatLng location = new LatLng(place.location.latitude, place.location.longitude);
+            map.addMarker(new MarkerOptions().position(location).title(place.name));
+        }
     }
 }
