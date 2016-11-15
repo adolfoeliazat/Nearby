@@ -9,21 +9,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
+import javax.inject.Inject;
 import rx.functions.Action1;
-import xyz.marcb.nearby.stubs.StubPlaces;
-import xyz.marcb.nearby.viewmodel.DefaultPlacesViewModel;
 import xyz.marcb.nearby.viewmodel.PlacesViewModel;
 import xyz.marcb.places.Place;
 
 public class NearbyActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    @Inject PlacesViewModel viewModel;
     private GoogleMap map;
-    private PlacesViewModel viewModel;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby);
-        viewModel = new DefaultPlacesViewModel(new StubPlaces());
+        ((NearbyApp) getApplication()).getComponent().inject(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
