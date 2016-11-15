@@ -5,6 +5,6 @@ import dagger.Component;
 
 @Singleton
 @Component(modules = NearbyModule.class)
-public interface NearbyComponent {
+interface NearbyComponent {
     void inject(NearbyActivity activity);
 }

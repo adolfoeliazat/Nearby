@@ -3,9 +3,8 @@ package xyz.marcb.nearby.viewmodels;
 import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 import rx.Observable;
-import xyz.marcb.places.Place;
 
 public interface PlacesViewModel {
     LatLng initialLocation();
-    Observable<List<Place>> places();
+    Observable<List<PlaceViewModel>> places();
 }
