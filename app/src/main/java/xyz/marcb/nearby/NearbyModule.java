@@ -1,9 +1,7 @@
 package xyz.marcb.nearby;
 
-import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
-import xyz.marcb.nearby.stubs.StubPlaces;
 import xyz.marcb.nearby.viewmodels.DefaultPlacesViewModel;
 import xyz.marcb.nearby.viewmodels.PlacesViewModel;
 import xyz.marcb.places.Places;
@@ -12,9 +10,5 @@ import xyz.marcb.places.Places;
 
     @Provides static PlacesViewModel placesViewModel(Places places) {
         return new DefaultPlacesViewModel(places);
-    }
-
-    @Provides @Singleton static Places places() {
-        return new StubPlaces();
     }
 }
