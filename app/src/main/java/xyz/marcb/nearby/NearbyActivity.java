@@ -21,6 +21,9 @@ import xyz.marcb.nearby.viewmodels.PlaceViewModel;
 import xyz.marcb.nearby.viewmodels.PlacesViewModel;
 
 public class NearbyActivity extends FragmentActivity implements OnMapReadyCallback {
+    private static final int DEFAULT_NEARBY_ZOOM_LEVEL = 16;
+    private static final int DEFAULT_TRENDING_ZOOM_LEVEL = 14;
+
     @BindView(R.id.bottom_bar) BottomBar bottomBar;
 
     @Inject PlacesViewModel viewModel;
@@ -34,21 +37,20 @@ public class NearbyActivity extends FragmentActivity implements OnMapReadyCallba
         ((NearbyApp) getApplication()).getComponent().inject(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        bottomBar.setOnTabSelectListener(tabId -> {
-            if (tabId == R.id.tab_trending) {
-                bindTo(viewModel.trending());
-            } else {
-                bindTo(viewModel.nearby());
-            }
-        });
     }
 
     @Override public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.moveCamera(CameraUpdateFactory.newLatLng(viewModel.initialLocation()));
-        map.moveCamera(CameraUpdateFactory.zoomTo(14));
-        bindTo(viewModel.nearby());
+        bottomBar.setOnTabSelectListener(tabId -> {
+            if (tabId == R.id.tab_trending) {
+                animateMapZoomTo(DEFAULT_TRENDING_ZOOM_LEVEL);
+                bindTo(viewModel.trending());
+            } else {
+                animateMapZoomTo(DEFAULT_NEARBY_ZOOM_LEVEL);
+                bindTo(viewModel.nearby());
+            }
+        });
     }
 
     @Override protected void onDestroy() {
@@ -58,6 +60,7 @@ public class NearbyActivity extends FragmentActivity implements OnMapReadyCallba
 
     private void bindTo(Observable<List<PlaceViewModel>> placesObservable) {
         clearSubscription();
+        map.clear();
         subscription = placesObservable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -72,6 +75,10 @@ public class NearbyActivity extends FragmentActivity implements OnMapReadyCallba
         for (PlaceViewModel place: places) {
             map.addMarker(new MarkerOptions().position(place.location()).title(place.name()));
         }
+    }
+
+    private void animateMapZoomTo(float zoom) {
+        map.animateCamera(CameraUpdateFactory.zoomTo(zoom));
     }
 
     private void clearSubscription() {
