@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_nearby"
+        icon="@drawable/ic_near_me_black_24dp"
+        title="@string/nearby"/>
+
+    <tab
+        id="@+id/tab_trending"
+        icon="@drawable/ic_trending_up_black_24dp"
+        title="@string/trending"/>
+</tabs>

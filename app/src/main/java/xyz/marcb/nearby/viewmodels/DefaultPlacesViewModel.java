@@ -14,15 +14,19 @@ public final class DefaultPlacesViewModel implements PlacesViewModel {
 
     public DefaultPlacesViewModel(Places places) {
         this.places = places;
-        this.currentLocation = new Location(50.719252, -1.842904);
+        this.currentLocation = new Location(40.761969, -73.986336);
     }
 
     @Override public LatLng initialLocation() {
         return new LatLng(currentLocation.latitude, currentLocation.longitude);
     }
 
-    @Override public Observable<List<PlaceViewModel>> places() {
+    @Override public Observable<List<PlaceViewModel>> nearby() {
         return places.near(currentLocation).map(this::convert);
+    }
+
+    @Override public Observable<List<PlaceViewModel>> trending() {
+        return places.trendingNear(currentLocation).map(this::convert);
     }
 
     private List<PlaceViewModel> convert(List<Place> places) {

@@ -6,5 +6,6 @@ import rx.Observable;
 
 public interface PlacesViewModel {
     LatLng initialLocation();
-    Observable<List<PlaceViewModel>> places();
+    Observable<List<PlaceViewModel>> nearby();
+    Observable<List<PlaceViewModel>> trending();
 }

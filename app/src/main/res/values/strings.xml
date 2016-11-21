@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Nearby</string>
     <string name="title_activity_nearby">Nearby</string>
+    <string name="nearby">Nearby</string>
+    <string name="trending">Trending</string>
 </resources>

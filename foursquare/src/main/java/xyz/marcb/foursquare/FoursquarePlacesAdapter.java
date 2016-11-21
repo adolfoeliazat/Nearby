@@ -18,7 +18,17 @@ final class FoursquarePlacesAdapter implements Places {
     }
 
     @Override public Observable<List<Place>> near(Location location) {
-        return foursquareService.venues(location).map(this::convert);
+        return foursquareService.explore(location).map(this::convert);
+    }
+
+    @Override public Observable<List<Place>> trendingNear(Location location) {
+        return foursquareService.trending(location).map( it -> {
+            final List<Place> places = new ArrayList<>();
+            for (Venue venue : it.response.venues) {
+                places.add(new Place(venue.name, new Location(venue.location.lat, venue.location.lng)));
+            }
+            return places;
+        });
     }
 
     private List<Place> convert(Venues venues) {
